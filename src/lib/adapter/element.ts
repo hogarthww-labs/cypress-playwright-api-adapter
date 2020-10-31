@@ -1,14 +1,31 @@
-export class CypressElementAdapter {
+import { ElementContainer } from "./elementContainer"
+
+export class CypressElementAdapter extends ElementContainer {
   handle: any
   ctx: any
 
   constructor(handle, ctx = {}) {
+    super(ctx)
     this.handle = handle
-    this.ctx = ctx
+  }
+
+  get cy() {
+    return this.ctx.cy
+  }
+
+  focus() {
+    return this.handle.focus()
+  }
+
+  within(cb) {
+    const oldBaseElement = this.cy.baseElement()
+    this.cy.setBaseElement(this)
+    cb()
+    this.cy.setBaseElement(oldBaseElement)
   }
 
   as(alias) {    
-    this.ctx[alias] = this.handle
+    this.aliases[alias] = this.handle
     return this
   }
 

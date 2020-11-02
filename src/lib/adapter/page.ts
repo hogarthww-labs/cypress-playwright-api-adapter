@@ -6,6 +6,10 @@ export class CypressPageAdapter extends ElementContainer {
     this.ctx.page = page
   }
 
+  async visit(page) {
+    await this.page.goto(page)
+  }
+
   async get(selector): Promise<CypressElementAdapter> {
     const handle = await this.page.$(selector);
     return this.createElement(handle)

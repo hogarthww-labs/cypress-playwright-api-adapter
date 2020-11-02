@@ -1,4 +1,5 @@
 import { ElementContainer } from "./elementContainer"
+type AsyncCallback = () => Promise<any>;
 
 export class CypressElementAdapter extends ElementContainer {
   handle: any
@@ -17,11 +18,12 @@ export class CypressElementAdapter extends ElementContainer {
     return this.handle.focus()
   }
 
-  within(cb) {
+  async within(cb: AsyncCallback) {
     const oldBaseElement = this.cy.baseElement()
     this.cy.setBaseElement(this)
-    cb()
+    await cb()
     this.cy.setBaseElement(oldBaseElement)
+    return this
   }
 
   as(alias) {    
